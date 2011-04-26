@@ -1,0 +1,26 @@
+Index: sc-r61975953edd0/Makefile
+===================================================================
+--- sc-r61975953edd0.orig/Makefile	2011-04-11 12:28:36.484347994 +0200
++++ sc-r61975953edd0/Makefile	2011-04-11 12:29:02.792348001 +0200
+@@ -176,7 +176,7 @@
+ 	$(CXX) $(CXXFLAGS) -c $(DEFINES) $(SHAREDDEFINES) $(INCLUDES) $<
+ 
+ libvdr-$(PLUGIN).so: $(OBJS) $(FFDECSA)
+-	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(FFDECSA) $(LIBS) $(SHAREDLIBS) -o $@
++	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(FFDECSA) $(LIBS) $(SHAREDLIBS) -o $@
+ 
+ $(LIBDIR)/libvdr-$(PLUGIN).so.$(APIVERSION): libvdr-$(PLUGIN).so
+ 	@cp -p $< $@
+Index: sc-r61975953edd0/Makefile.system
+===================================================================
+--- sc-r61975953edd0.orig/Makefile.system	2011-04-11 12:29:06.456347994 +0200
++++ sc-r61975953edd0/Makefile.system	2011-04-11 12:29:51.852348009 +0200
+@@ -65,7 +65,7 @@
+ 	$(CXX) $(CXXFLAGS) -c $(DEFINES) $(SHAREDDEFINES) $(SINCLUDES) $<
+ 
+ $(LIBSC): $(OBJS)
+-	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(LIBS) $(SHAREDLIBS) -o $@
++	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LIBS) $(SHAREDLIBS) -o $@
+ 	$(clean-pre)
+ 
+ $(LIBDIR)/$(LIBSCVER): $(LIBSC)
