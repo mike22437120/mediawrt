@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -86,7 +86,7 @@ define Package/vdr/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/vdr $(1)/usr/bin/
 	
 	$(INSTALL_DIR) $(1)/usr/lib/vdr/plugins
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/vdr/plugins/* $(1)/usr/lib/vdr/plugins/
+	$(cd v) $(PKG_INSTALL_DIR)/usr/lib/vdr/plugins/* $(1)/usr/lib/vdr/plugins/
 
 	$(INSTALL_DIR) $(1)/usr/share/vdr/locale
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/vdr/locale/* $(1)/usr/share/vdr/locale/
