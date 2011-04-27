@@ -23,9 +23,9 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/attr
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=Filesystem Extended Attributes
+  TITLE:=Extended attribute package library
   DEPENDS:=$(ICONV_DEPENDS) $(INTL_DEPENDS)
-  URL:=
+  URL:=http://savannah.nongnu.org/projects/attr
 endef
 
 define Package/attr/description
