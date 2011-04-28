@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://wirbel.htpc-forum.de/w_scan
 PKG_BUILD_DIR:=$(BUILD_DIR)/w_scan-$(PKG_VERSION)
 PKG_MD5SUM:=bdb8ac0a5e409e060c6ab406b4cfc2c6
 
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/w_scan

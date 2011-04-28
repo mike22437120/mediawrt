@@ -30,7 +30,7 @@ define Package/vdr-plugin-vnsiserver
 endef
 
 define Package/vdr-plugin-vnsiserver/description
-  A VNSI server for VDR, allowing the use of VDR via VNSI PVR addon of XBMC.
+  A VNSI(VDR Network Streaming Interface) server for VDR, allowing the use of VDR via VNSI PVR addon of XBMC.
 endef
 
 define Build/Compile
