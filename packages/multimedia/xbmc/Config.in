@@ -1,0 +1,32 @@
+config NONFREE_SUPPORT
+	bool "Non Free support"
+	default n
+
+config DVDCSS_SUPPORT
+	bool "DVD CSS support"
+	default n
+
+config FAAC_SUPPORT
+	bool "FAAC support"
+	default n
+
+config AVAHI_DAEMON
+	bool "AVAHI support"
+	default n
+
+config WEBSERVER
+	bool "WEBSERVER support"
+	default n
+
+config VDPAU
+	bool "VDPAU support"
+	default n
+
+config VAAPI
+	bool "VAAPI support"
+	default n
+
+config CRYSTALHD
+	bool "CRYSTALHD support"
+	default n
+	

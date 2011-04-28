@@ -1,0 +1,26 @@
+Index: vdr-1.7.17/libsi/si.c
+===================================================================
+--- vdr-1.7.17.orig/libsi/si.c	2011-03-22 12:19:25.694769064 +0100
++++ vdr-1.7.17/libsi/si.c	2011-03-22 12:20:07.526770314 +0100
+@@ -381,7 +381,7 @@
+   if (SystemCharacterTable) {
+      iconv_t cd = iconv_open(SystemCharacterTable, fromCode);
+      if (cd != (iconv_t)-1) {
+-        char *fromPtr = (char *)from;
++        const char *fromPtr = from;
+         while (fromLength > 0 && toLength > 1) {
+            if (iconv(cd, &fromPtr, &fromLength, &to, &toLength) == size_t(-1)) {
+               if (errno == EILSEQ) {
+Index: vdr-1.7.17/tools.c
+===================================================================
+--- vdr-1.7.17.orig/tools.c	2011-03-22 12:17:47.022769064 +0100
++++ vdr-1.7.17/tools.c	2011-03-22 12:19:17.290769404 +0100
+@@ -818,7 +818,7 @@
+ const char *cCharSetConv::Convert(const char *From, char *To, size_t ToLength)
+ {
+   if (cd != (iconv_t)-1 && From && *From) {
+-     char *FromPtr = (char *)From;
++     const char *FromPtr = From;
+      size_t FromLength = strlen(From);
+      char *ToPtr = To;
+      if (!ToPtr) {

@@ -1,0 +1,4 @@
+config TVHEADEND_AVAHI_SUPPORT
+	bool "Avahi client support"
+	select PACKAGE_libavahi-client
+	default n

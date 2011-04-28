@@ -1,0 +1,33 @@
+Index: xbmc-10.1/configure.in
+===================================================================
+--- xbmc-10.1.orig/configure.in	2011-04-28 16:23:34.274751001 +0200
++++ xbmc-10.1/configure.in	2011-04-28 16:25:18.614749867 +0200
+@@ -609,9 +609,6 @@
+ AS_CASE([x$use_libbluray],
+   [xyes],[
+     INCLUDES="$INCLUDES $LIBBLURAY_CFLAGS";
+-    if test "$host_vendor" != "apple"; then
+-      XB_FIND_SONAME([BLURAY], [bluray], [use_libbluray])
+-    fi;
+     AC_DEFINE([HAVE_LIBBLURAY], 1, [System has libbluray library])
+     AC_SUBST([HAVE_LIBBLURAY], 1)
+   ],[
+@@ -689,18 +686,6 @@
+   HOST_NOT_APPLE=0
+ fi
+ 
+-if test "$host_vendor" != "apple"; then
+-  XB_FIND_SONAME([CURL],        [curl])
+-  XB_FIND_SONAME([FLAC],        [FLAC])
+-  XB_FIND_SONAME([MODPLUG],     [modplug])
+-  XB_FIND_SONAME([FAAD],        [faad])
+-  XB_FIND_SONAME([MAD],         [mad])
+-fi
+-XB_FIND_SONAME([OGG],         [ogg])
+-XB_FIND_SONAME([VORBIS],      [vorbis])
+-XB_FIND_SONAME([VORBISENC],   [vorbisenc])
+-XB_FIND_SONAME([VORBISFILE],  [vorbisfile])
+-
+ # WebServer
+ if test "$host_vendor" != "apple" ; then
+   if test "$use_webserver" = "yes"; then
