@@ -22,13 +22,12 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libcap
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=
   TITLE:=POSIX 1003.1e capabilities
   URL:=http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/
 endef
 
 HOST_CFLAGS += \
-	"-I$(PKG_BUILD_DIR)/libcap/include"
+	-I$(PKG_BUILD_DIR)/libcap/include
 
 TARGET_LDFLAGS += \
 		-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
