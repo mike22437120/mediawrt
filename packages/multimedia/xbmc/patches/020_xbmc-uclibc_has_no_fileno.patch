@@ -1,0 +1,20 @@
+Index: xbmc-10.1/xbmc/cores/DllLoader/exports/util/EmuFileWrapper.h
+===================================================================
+--- xbmc-10.1.orig/xbmc/cores/DllLoader/exports/util/EmuFileWrapper.h	2011-04-29 14:35:45.305631994 +0200
++++ xbmc-10.1/xbmc/cores/DllLoader/exports/util/EmuFileWrapper.h	2011-04-29 14:36:57.193631799 +0200
+@@ -29,10 +29,14 @@
+ 
+ class CMutex;
+ 
+-#if defined(_LINUX) && !defined(__APPLE__)
++#if defined(_LINUX) && !defined(__APPLE__) && !defined(__UCLIBC__)
+ #define _file _fileno
+ #endif
+ 
++#if defined(__UCLIBC__)
++#define _file __filedes
++#endif
++
+ #define MAX_EMULATED_FILES    50
+ #define FILE_WRAPPER_OFFSET   0x00000100
+ 
