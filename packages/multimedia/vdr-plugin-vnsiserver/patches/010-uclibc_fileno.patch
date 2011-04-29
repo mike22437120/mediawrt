@@ -1,13 +1,16 @@
 Index: vnsiserver-r35744/recplayer.c
 ===================================================================
---- vnsiserver-r35744.orig/recplayer.c	2011-04-11 14:02:57.968347997 +0200
-+++ vnsiserver-r35744/recplayer.c	2011-04-11 14:03:35.080346861 +0200
-@@ -190,7 +190,7 @@
+--- vnsiserver-r35744.orig/recplayer.c	2011-04-29 15:35:20.013631996 +0200
++++ vnsiserver-r35744/recplayer.c	2011-04-29 15:36:50.637631994 +0200
+@@ -190,7 +190,11 @@
      fread(&buffer[got], getFromThisSegment, 1, m_file);
  
      // Tell linux not to bother keeping the data in the FS cache
--    posix_fadvise(m_file->_fileno, filePosition, getFromThisSegment, POSIX_FADV_DONTNEED);
++#if defined(__UCLIBC__)
 +    posix_fadvise(m_file->__filedes, filePosition, getFromThisSegment, POSIX_FADV_DONTNEED);
++#else
+     posix_fadvise(m_file->_fileno, filePosition, getFromThisSegment, POSIX_FADV_DONTNEED);
++#endif
  
      got += getFromThisSegment;
      currentPosition += getFromThisSegment;
