@@ -1,0 +1,16 @@
+Index: libssh-0.4.8/cmake/Modules/DefineCompilerFlags.cmake
+===================================================================
+--- libssh-0.4.8.orig/cmake/Modules/DefineCompilerFlags.cmake	2011-04-28 14:48:12.846751000 +0200
++++ libssh-0.4.8/cmake/Modules/DefineCompilerFlags.cmake	2011-04-28 14:48:26.050751257 +0200
+@@ -13,11 +13,6 @@
+       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+     endif (WITH_FPIC)
+ 
+-    check_c_compiler_flag("-fstack-protector" WITH_STACK_PROTECTOR)
+-    if (WITH_STACK_PROTECTOR)
+-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
+-    endif (WITH_STACK_PROTECTOR)
+-
+     check_c_compiler_flag("-D_FORTIFY_SOURCE=2" WITH_FORTIFY_SOURCE)
+     if (WITH_FORTIFY_SOURCE)
+       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2")
