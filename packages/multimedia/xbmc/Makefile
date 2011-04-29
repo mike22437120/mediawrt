@@ -27,7 +27,7 @@ define Package/xbmc
   CATEGORY:=Multimedia
   TITLE:=XBMC Mediacenter
   URL:=http://www.xbmc.org
-  DEPENDS:= @BUILD_NLS +boost +python +zlib +bzip2 +liblzo +libpcre +alsa-lib +libass +enca +curl +rtmpdump +dbus +libXt +libXtst +samba3-libs \
+  DEPENDS:=+@BUILD_NLS +boost +python +zlib +bzip2 +liblzo +libpcre +alsa-lib +libass +enca +curl +rtmpdump +dbus +libXt +libXtst +samba3-libs \
 	   +libXmu +libXrandr +libgl-mesa +glew +fontconfig +fribidi +libjpeg +libpng +libtiff +libfreetype +jasper +libmad +libsamplerate \
 	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libbluray +libsdl +libsdl-mixer +libsdl-image +libsqlite3 +libmysqlclient +libssh \
 	   +libvdpau +libXinerama +libreadline $(ICONV_DEPENDS) $(INTL_DEPENDS)
