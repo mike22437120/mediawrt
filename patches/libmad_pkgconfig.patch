@@ -1,0 +1,36 @@
+Index: libs/libmad/files/mad.pc
+===================================================================
+--- libs/libmad/files/mad.pc	(revision 0)
++++ libs/libmad/files/mad.pc	(revision 0)
+@@ -0,0 +1,11 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: mad
++Description: MPEG audio decoder
++Version: 0.15.1b
++Requires:
++Libs: -L${libdir} -lmad
++Cflags: -I${includedir}
+
+Property changes on: libs/libmad/files/mad.pc
+___________________________________________________________________
+Added: svn:executable
+   + *
+
+Index: libs/libmad/Makefile
+===================================================================
+--- libs/libmad/Makefile	(revision 26761)
++++ libs/libmad/Makefile	(working copy)
+@@ -72,6 +72,8 @@
+ 	$(CP) $(PKG_INSTALL_DIR)/usr/include/mad.h $(1)/usr/include/
+ 	$(INSTALL_DIR) $(1)/usr/lib
+ 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmad.{a,so*} $(1)/usr/lib/
++	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
++	$(CP) ./files/mad.pc $(1)/usr/lib/pkgconfig
+ endef
+ 
+ define Package/libmad/install
+
