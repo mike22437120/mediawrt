@@ -1,0 +1,21 @@
+Index: enca-1.13/configure
+===================================================================
+--- enca-1.13.orig/configure	2011-04-29 13:08:36.385631995 +0200
++++ enca-1.13/configure	2011-04-29 13:11:26.873632017 +0200
+@@ -12035,16 +12035,6 @@
+ 
+ fi
+ 
+-
+-if test "$prefix" = "NONE"; then
+-  LDFLAGS="$LDFLAGS -L$ac_default_prefix/lib"
+-  CPPFLAGS="$CPPFLAGS -I$ac_default_prefix/include"
+-else
+-  LDFLAGS="$LDFLAGS -L$prefix/lib"
+-  CPPFLAGS="$CPPFLAGS -I$prefix/include"
+-fi
+-
+-
+ case "$target" in
+ NONE) yeti_libm_target="$host" ;;
+ *) yeti_libm_target="$target" ;;
