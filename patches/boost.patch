@@ -1,7 +1,7 @@
-Index: libs/boost/Makefile
+Index: feeds/packages/libs/boost/Makefile
 ===================================================================
---- libs/boost/Makefile	(revision 26761)
-+++ libs/boost/Makefile	(working copy)
+--- feeds/packages/libs/boost/Makefile	(revision 26761)
++++ feeds/packages/libs/boost/Makefile	(working copy)
 @@ -143,6 +143,24 @@
  define Build/Configure
  endef

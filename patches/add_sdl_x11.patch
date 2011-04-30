@@ -1,7 +1,7 @@
-Index: libs/libsdl/Makefile
+Index: feeds/packages/libs/libsdl/Makefile
 ===================================================================
---- libs/libsdl/Makefile	(revision 26783)
-+++ libs/libsdl/Makefile	(working copy)
+--- feeds/packages/libs/libsdl/Makefile	(revision 26783)
++++ feeds/packages/libs/libsdl/Makefile	(working copy)
 @@ -120,6 +120,18 @@
  	--disable-alsa
  endif
