@@ -27,10 +27,11 @@ define Package/xbmc
   CATEGORY:=Multimedia
   TITLE:=XBMC Mediacenter
   URL:=http://www.xbmc.org
-  DEPENDS:=+@BUILD_NLS +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +rtmpdump +dbus +libXt +libXtst +samba3-libs \
-	   +libXmu +libXrandr +libgl-mesa +glew +fontconfig +fribidi +libjpeg +libpng +libtiff +libfreetype +jasper +libmad +libsamplerate \
-	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libbluray +libsdl +libsdl-mixer +libsdl-image +libsqlite3 +libmysqlclient +libssh \
-	   +libvdpau +libXinerama +libreadline $(ICONV_DEPENDS) $(INTL_DEPENDS)
+  DEPENDS:= +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +rtmpdump +dbus +libXt +libXtst +samba3-libs \
+	   +libXmu +libXrandr +libglu-mesa +glew +fontconfig +fribidi +libjpeg +libpng +libtiff +libfreetype +jasper +libmad +libsamplerate \
+	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libbluray +libsdl +libsdl-mixer +libsdl-image \
+	   +libsqlite3 +libmysqlclient +librt +libssh +libvdpau +libXinerama +libreadline +uclibcxx \
+	   $(ICONV_DEPENDS) $(INTL_DEPENDS) +@BUILD_NLS +@FEATURE_drawing-backend_libX11
 endef
 
 define Package/xbmc/config
@@ -47,45 +48,36 @@ define Package/xbmc/description
   optical disk, local network, and the internet using a remote control.
 endef
 
-TARGET_CFLAGS:=$(subst -Os,-O2,$(TARGET_CFLAGS))
-TARGET_CXXFLAGS:=$(subst -Os,-O2,$(TARGET_CXXFLAGS))
-
-EXTRA_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/include \
-	-I$(STAGING_DIR)/usr/lib/libintl/include
-
-EXTRA_LDFLAGS= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-Wl,-rpath=/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib
-
+TARGET_LDFLAGS += \
+	-lc \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+	
 CONFIGURE_ARGS+= \
-            --with-arch=i686 \
-            --with-cpu=i686 \
-            --disable-debug \
-            --disable-optimizations \
-            --enable-gl \
-            --disable-vdadecoder \
-            --disable-profiling \
-            --enable-joystick \
-            --enable-xrandr \
-            --disable-goom \
-            --disable-xbmcprojectm \
-            --disable-rsxs \
-            --disable-ccache \
-            --enable-ffmpeg-libvorbis \
-            --disable-mid \
-            --disable-hal \
-            --disable-asap-codec \
-            --disable-libdts \
-            --disable-liba52 \
-			--enable-libbluray \
-            --disable-external-ffmpeg \
-            --disable-external-liba52 \
-            --disable-external-libdts \
-            --enable-external-python \
-			--enable-external-libraries
+	--with-arch=i686 \
+	--with-cpu=i686 \
+	--disable-debug \
+	--disable-optimizations \
+	--enable-gl \
+	--disable-vdadecoder \
+	--disable-profiling \
+	--enable-joystick \
+	--enable-xrandr \
+	--disable-goom \
+	--disable-xbmcprojectm \
+	--disable-rsxs \
+	--disable-ccache \
+	--enable-ffmpeg-libvorbis \
+	--disable-mid \
+	--disable-hal \
+	--disable-asap-codec \
+	--disable-libdts \
+	--disable-liba52 \
+	--enable-libbluray \
+	--disable-external-ffmpeg \
+	--disable-external-liba52 \
+	--disable-external-libdts \
+	--enable-external-python \
+	--enable-external-libraries
 
 ifneq ($(CONFIG_PULSEAUDIO_SUPPORT),)
 CONFIGURE_ARGS+= --enable-pulse
@@ -98,13 +90,13 @@ CONFIGURE_ARGS+= --enable-non-free
 else
 CONFIGURE_ARGS+= --disable-non-free
 endif
-	    
+
 ifneq ($(CONFIG_DVDCSS_SUPPORT),)
 CONFIGURE_ARGS+= --enable-dvdcss
 else
 CONFIGURE_ARGS+= --disable-dvdcss
 endif 
-   
+
 ifneq ($(CONFIG_FAAC_SUPPORT),)
 CONFIGURE_ARGS+= --enable-faac
 else
@@ -122,7 +114,7 @@ CONFIGURE_ARGS+= --enable-webserver
 else
 CONFIGURE_ARGS+= --disable-webserver
 endif
-	    
+
 ifneq ($(CONFIG_VDPAU),)
 CONFIGURE_ARGS+= --enable-vdpau
 else
@@ -158,8 +150,14 @@ define Build/Compile
 endef
 
 define Package/xbmc/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/bin
+
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/xbmc $(1)/usr/lib
+
+	$(INSTALL_DIR) $(1)/usr/share
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/ $(1)/usr/share
 endef
-        
+
 $(eval $(call BuildPackage,xbmc))
