@@ -1,24 +1,333 @@
-Index: feeds/packages/libs/libsdl/Makefile
+Index: feeds/packages/libs/libsdl/Config.in
 ===================================================================
---- feeds/packages/libs/libsdl/Makefile	(revision 26783)
+--- feeds/packages/libs/libsdl/Config.in	(revision 0)
++++ feeds/packages/libs/libsdl/Config.in	(revision 0)
+@@ -0,0 +1,103 @@
++menu "Configuration"
++	depends PACKAGE_libsdl
++
++menuconfig SDL_VIDEO
++	bool "Video Configuration"
++	default y
++
++	config SDL_VIDEO_X11
++		bool "X11 Support"
++		depends SDL_VIDEO
++		depends FEATURE_drawing-backend_libX11
++		select PACKAGE_libXext
++		default n
++
++	config SDL_VIDEO_X11_DGA
++		bool "X11 DGA Support"
++		depends SDL_VIDEO_X11
++		default y
++		
++	config SDL_VIDEO_X11_VM
++		bool "X11 VM extension for fullscreen"
++		depends SDL_VIDEO_X11	
++		default y
++		
++	config SDL_VIDEO_X11_XV
++		bool "X11 XvImage extension for video"
++		depends SDL_VIDEO_X11
++		default y
++
++	config SDL_VIDEO_X11_XINERAMA
++		bool "X11 Xinerama support"
++		depends SDL_VIDEO_X11
++		default n
++
++	config SDL_VIDEO_X11_XME
++		bool "Xi Graphics XME for fullscreen"
++		depends SDL_VIDEO_X11
++		default n
++
++	config SDL_VIDEO_X11_XRANDR	
++		bool "X11 Xrandr extension for fullscreen"
++		depends SDL_VIDEO_X11
++		select PACKAGE_libXrandr
++		default n
++
++	config SDL_VIDEO_X11_DGAMOUSE	
++		bool "X11 DGA for mouse events" 
++		depends SDL_VIDEO_X11
++		default y
++
++	config SDL_VIDEO_FBCON
++		bool "Framebuffer support"
++		depends SDL_VIDEO
++		default y
++		
++	config SDL_VIDEO_DIRECTFB
++		bool "DirectFB video driver"
++		depends SDL_VIDEO
++		depends FEATURE_drawing-backend_DirectFB
++		select PACKAGE_directfb
++		default y
++		
++	config SDL_VIDEO_OPENGL
++		bool "OpenGL support"
++		depends SDL_VIDEO
++		default y
++	
++menuconfig SDL_AUDIO
++	bool "Audio Configuration"
++	depends PACKAGE_libsdl
++	default AUDIO_SUPPORT
++
++	config SDL_AUDIO_OSS
++		bool "Support OSS audio API"
++		depends SDL_AUDIO
++		default n
++
++	config SDL_AUDIO_ALSA
++		bool "Support ALSA audio API"
++		depends SDL_AUDIO
++		default AUDIO_SUPPORT
++
++	config SDL_AUDIO_PULSEAUDIO
++		bool "Support PulseAudio"
++		depends SDL_AUDIO
++		default n
++
++	config SDL_AUDIO_NAS
++		bool "Support NAS audio API"
++		depends SDL_AUDIO
++		default n
++		
++	config SDL_AUDIO_ARTS
++		bool "Support Analog Real Time Synthesizer"
++		depends SDL_AUDIO
++		default n
++
++	config SDL_AUDIO_ESD
++		bool "Support Enlightened Sound Daemon"
++		depends SDL_AUDIO
++		default n
++endmenu
++
+
+Index: libs/libsdl/Makefile
+===================================================================
+--- feeds/packages/libs/libsdl/Makefile	(revision 26818)
 +++ feeds/packages/libs/libsdl/Makefile	(working copy)
-@@ -120,6 +120,18 @@
- 	--disable-alsa
+@@ -27,17 +27,23 @@
+   CATEGORY:=Libraries
+   TITLE:=Simple DirectMedia Layer
+   URL:=http://www.libsdl.org
+-  DEPENDS:=+directfb +zlib +libpthread +AUDIO_SUPPORT:alsa-lib
++  DEPENDS:=+zlib +libpthread +AUDIO_SUPPORT:alsa-lib
+ endef
+ 
++define Package/libsdl/config
++  source "$(SOURCE)/Config.in"
++endef
++
+ define Package/libsdl/description
+  SDL is a library that allows programs portable low level access to a video
+  framebuffer, audio output, mouse, and keyboard.
+ endef
+ 
++TARGET_LDFLAGS += \
++		-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
++
+ CONFIGURE_ARGS+= \
+ 	--enable-libc \
+-	--enable-video \
+ 	--enable-events \
+ 	--enable-joystick \
+ 	--enable-cdrom \
+@@ -47,40 +53,24 @@
+ 	--enable-loadso \
+ 	--enable-cpuinfo \
+ 	--enable-assembly \
+-	--disable-oss \
+ 	--disable-alsatest \
+ 	--enable-alsa-shared \
+-	--disable-esd \
++	--enable-pulseaudio-shared \
+ 	--disable-esdtest \
+ 	--enable-esd-shared \
+-	--disable-pulseaudio \
+-	--enable-pulseaudio-shared \
+-	--disable-arts \
+ 	--enable-arts-shared \
+-	--disable-nas \
+ 	--enable-nas-shared \
++	--enable-x11-shared \
+ 	--disable-diskaudio \
+ 	--disable-dummyaudio \
+ 	--disable-mintaudio \
+ 	--disable-nasm \
+ 	--disable-altivec \
+ 	--disable-ipod \
+-	--disable-nanox \
+-	--disable-video-x11 \
+-	--enable-x11-shared \
+-	--enable-dga \
+-	--enable-video-dga \
+-	--enable-video-x11-dgamouse \
+-	--enable-video-x11-vm \
+-	--enable-video-x11-xv \
+-	--disable-video-x11-xinerama \
+-	--disable-video-x11-xme \
+-	--disable-video-x11-xrandr \
++	--disable-video-nanox \
+ 	--disable-video-photon \
+ 	--disable-video-carbon \
+ 	--disable-video-cocoa \
+-	--enable-video-fbcon \
+-	--enable-video-directfb \
+ 	--disable-video-ps2gs \
+ 	--disable-video-ps3 \
+ 	--disable-video-ggi \
+@@ -94,7 +84,6 @@
+ 	--disable-video-xbios \
+ 	--disable-video-gem \
+ 	--disable-video-dummy \
+-	--disable-video-opengl \
+ 	--disable-osmesa-shared \
+ 	--disable-screensaver \
+ 	--enable-input-events \
+@@ -107,19 +96,125 @@
+ 	--enable-sdl-dlopen \
+ 	--disable-atari-ldg \
+ 	--disable-clock_gettime \
+-	--without-x \
+-	--disable-rpath \
++	--enable-dga
+ 
+-ifneq ($(CONFIG_AUDIO_SUPPORT),)
+-  CONFIGURE_ARGS+= \
+-	--enable-audio \
+-	--enable-alsa
++ifneq ($(CONFIG_SDL_VIDEO),)
++  CONFIGURE_ARGS+= --enable-video
+ else
+-  CONFIGURE_ARGS+= \
+-	--disable-audio \
+-	--disable-alsa
++  CONFIGURE_ARGS+= --disable-video
++endif	
++	
++ifneq ($(CONFIG_SDL_VIDEO_X11),)
++  CONFIGURE_ARGS+= 	--with-x \
++					--enable-video-x11
++else
++  CONFIGURE_ARGS+= 	--without-x \
++					--disable-video-x11
  endif
  
-+ifneq ($(CONFIG_FEATURE_drawing-backend_DirectFB),)
-+  CONFIGURE_ARGS+= \
-+	--disable-video-x11 \
-+	--without-x \
-+	--enable-video-directfb
++ifneq ($(CONFIG_SDL_VIDEO_X11_DGA),)
++  CONFIGURE_ARGS+= --enable-video-dga
 +else
-+  CONFIGURE_ARGS+= \
-+	--enable-video-x11 \
-+	--with-x \
-+	--disable-video-directfb
++  CONFIGURE_ARGS+= --disable-video-dga
 +endif
++
++ifneq ($(CONFIG_SDL_VIDEO_X11_VM),)
++  CONFIGURE_ARGS+= --enable-video-x11-vm
++else
++  CONFIGURE_ARGS+= --disable-video-x11-vm
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_X11_XV),)
++  CONFIGURE_ARGS+= --enable-video-x11-xv
++else
++  CONFIGURE_ARGS+= --disable-video-x11-xv
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_X11_XINERAMA),)
++  CONFIGURE_ARGS+= --enable-video-x11-xinerama
++else
++  CONFIGURE_ARGS+= --disable-video-x11-xinerama
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_X11_XME),)
++  CONFIGURE_ARGS+= --enable-video-x11-xme
++else
++  CONFIGURE_ARGS+= --disable-video-x11-xme
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_X11_XRANDR),)
++  CONFIGURE_ARGS+= --enable-video-x11-xrandr
++else
++  CONFIGURE_ARGS+= --disable-video-x11-xrandr
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_X11_DGAMOUSE),)
++  CONFIGURE_ARGS+= --enable-video-x11-dgamouse
++else
++  CONFIGURE_ARGS+= --disable-video-x11-dgamouse
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_FBCON),)
++  CONFIGURE_ARGS+= --enable-video-fbcon
++else
++  CONFIGURE_ARGS+= --disable-video-fbcon
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_DIRECTFB),)
++  CONFIGURE_ARGS+= --enable-video-directfb
++else
++  CONFIGURE_ARGS+= --disable-video-directfb
++endif
++
++ifneq ($(CONFIG_SDL_VIDEO_OPENGL),)
++  CONFIGURE_ARGS+= --enable-video-opengl
++else
++  CONFIGURE_ARGS+= --disable-video-opengl
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO),)
++  CONFIGURE_ARGS+= --enable-audio
++else
++  CONFIGURE_ARGS+= --disable-audio
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO_OSS),)
++  CONFIGURE_ARGS+= --enable-oss
++else
++  CONFIGURE_ARGS+= --disable-oss
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO_ALSA),)
++  CONFIGURE_ARGS+= --enable-alsa
++else
++  CONFIGURE_ARGS+= --disable-alsa
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO_PULSEAUDIO),)
++  CONFIGURE_ARGS+= --enable-pulseaudio
++else
++  CONFIGURE_ARGS+= --disable-pulseaudio
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO_NAS),)
++  CONFIGURE_ARGS+= --enable-nas
++else
++  CONFIGURE_ARGS+= --disable-nas
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO_ARTS),)
++  CONFIGURE_ARGS+= --enable-arts
++else
++  CONFIGURE_ARGS+= --disable-arts
++endif
++
++ifneq ($(CONFIG_SDL_AUDIO_ESD),)
++  CONFIGURE_ARGS+= --enable-esd
++else
++  CONFIGURE_ARGS+= --disable-esd
++endif
++
 +
  CONFIGURE_VARS+= \
  		ac_cv_path_DIRECTFBCONFIG=no \
  
+@@ -159,3 +254,5 @@
+ endef
+ 
+ $(eval $(call BuildPackage,libsdl))
++
++
 
