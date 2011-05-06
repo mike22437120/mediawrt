@@ -47,12 +47,12 @@ define Build/InstallDev
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/sys/capability.h $(1)/usr/include/sys/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/libcap.{a,so*} $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libcap/libcap.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/libcap/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/libcap.so.* $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libcap/libcap.so.* $(1)/usr/lib/
 endef
 
 
