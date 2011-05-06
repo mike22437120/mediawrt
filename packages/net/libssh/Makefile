@@ -34,6 +34,7 @@ define Package/libssh/description
 endef
 
 MAKE_PATH:=build
+CONFIGURE_PATH:=build
 
 CMAKE_OPTIONS += \
 				..
