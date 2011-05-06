@@ -63,7 +63,6 @@ MAKE_FLAGS += \
 
 define Build/Configure
 	$(call Build/Configure/Default,)
-	rm -rf $(PKG_BUILD_DIR)/PLUGINS/src/*
 	
 	#make symlink to plugins
 	for tmp in $(plugin-y); do \
@@ -86,7 +85,7 @@ define Package/vdr/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/vdr $(1)/usr/bin/
 	
 	$(INSTALL_DIR) $(1)/usr/lib/vdr/plugins
-	$(cd v) $(PKG_INSTALL_DIR)/usr/lib/vdr/plugins/* $(1)/usr/lib/vdr/plugins/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/vdr/plugins/* $(1)/usr/lib/vdr/plugins/
 
 	$(INSTALL_DIR) $(1)/usr/share/vdr/locale
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/vdr/locale/* $(1)/usr/share/vdr/locale/
