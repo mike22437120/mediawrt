@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xbmc
-PKG_VERSION:=10.1
-PKG_REV:=c39220420ea927639b3f
+PKG_VERSION:=20110405
+PKG_REV:=93bd50ca905d72186e70
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -17,6 +17,7 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=git://github.com/xbmc/xbmc.git
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.bz2
 
+PKG_FIXUP:=autoreconf
 PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -27,11 +28,11 @@ define Package/xbmc
   CATEGORY:=Multimedia
   TITLE:=XBMC Mediacenter
   URL:=http://www.xbmc.org
-  DEPENDS:= +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +rtmpdump +dbus +libXt +libXtst +samba3-libs \
+  DEPENDS:= +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +dbus +libXt +libXtst +samba3-libs \
 	   +libXmu +libXrandr +libglu-mesa +glew +fontconfig +fribidi +libjpeg +libpng +libtiff +libfreetype +jasper +libmad +libsamplerate \
-	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libbluray +libsdl +libsdl-mixer +libsdl-image \
-	   +libsqlite3 +libmysqlclient +librt +libssh +libvdpau +libXinerama +libreadline +uclibcxx \
-	   $(ICONV_DEPENDS) $(INTL_DEPENDS) +@BUILD_NLS +@FEATURE_drawing-backend_libX11
+	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libsdl +libsdl-mixer +libsdl-image \
+	   +libsqlite3 +libmysqlclient +librt +libssh +libXinerama +libreadline +uclibcxx +ffmpeg +libstdcpp\
+	   $(ICONV_DEPENDS) $(INTL_DEPENDS) +@BUILD_NLS +@FEATURE_drawing-backend_libX11 @TARGET_x86
 endef
 
 define Package/xbmc/config
@@ -48,106 +49,105 @@ define Package/xbmc/description
   optical disk, local network, and the internet using a remote control.
 endef
 
+EXTRA_CFLAGS+= \
+	-I$(STAGING_DIR)/usr/include \
+
 TARGET_LDFLAGS += \
-	-lc \
+	-L$(STAGING_DIR)/usr/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-	
+
 CONFIGURE_ARGS+= \
-	--with-arch=i686 \
-	--with-cpu=i686 \
-	--disable-debug \
-	--disable-optimizations \
-	--enable-gl \
-	--disable-vdadecoder \
-	--disable-profiling \
-	--enable-joystick \
-	--enable-xrandr \
-	--disable-goom \
-	--disable-xbmcprojectm \
-	--disable-rsxs \
-	--disable-ccache \
-	--enable-ffmpeg-libvorbis \
-	--disable-mid \
-	--disable-hal \
-	--disable-asap-codec \
-	--disable-libdts \
-	--disable-liba52 \
-	--enable-libbluray \
+	--with-arch=$(ARCH) \
+	--with-cpu=$(ARCH) \
 	--disable-external-ffmpeg \
 	--disable-external-liba52 \
 	--disable-external-libdts \
 	--enable-external-python \
-	--enable-external-libraries
 
-ifneq ($(CONFIG_PULSEAUDIO_SUPPORT),)
+ifneq ($(CONFIG_XBMC_AVAHI),)
+CONFIGURE_ARGS+= --enable-avahi
+else
+CONFIGURE_ARGS+= --disable-avahi
+endif	
+
+ifneq ($(CONFIG_XBMC_BLURAY),)
+CONFIGURE_ARGS+= --enable-libbluray
+else
+CONFIGURE_ARGS+= --disable-libbluray
+endif
+
+ifneq ($(CONFIG_XBMC_PULSEAUDIO),)
 CONFIGURE_ARGS+= --enable-pulse
 else
 CONFIGURE_ARGS+= --disable-pulse
 endif
 
-ifneq ($(CONFIG_NONFREE_SUPPORT),)
+ifneq ($(CONFIG_XBMC_NONFREE),)
 CONFIGURE_ARGS+= --enable-non-free
 else
 CONFIGURE_ARGS+= --disable-non-free
 endif
 
-ifneq ($(CONFIG_DVDCSS_SUPPORT),)
+ifneq ($(CONFIG_XBMC_DVDCSS),)
 CONFIGURE_ARGS+= --enable-dvdcss
 else
 CONFIGURE_ARGS+= --disable-dvdcss
-endif 
+endif
 
-ifneq ($(CONFIG_FAAC_SUPPORT),)
+ifneq ($(CONFIG_XBMC_FAAC),)
 CONFIGURE_ARGS+= --enable-faac
 else
 CONFIGURE_ARGS+= --disable-faac
 endif
 
-ifneq ($(CONFIG_AVAHI_DAEMON),)
-CONFIGURE_ARGS+= --enable-avahi
-else
-CONFIGURE_ARGS+= --disable-avahi
-endif
-
-ifneq ($(CONFIG_WEBSERVER),)
+ifneq ($(CONFIG_XBMC_WEBSERVER),)
 CONFIGURE_ARGS+= --enable-webserver
 else
 CONFIGURE_ARGS+= --disable-webserver
 endif
 
-ifneq ($(CONFIG_VDPAU),)
+ifneq ($(CONFIG_XBMC_VDPAU),)
 CONFIGURE_ARGS+= --enable-vdpau
 else
 CONFIGURE_ARGS+= --disable-vdpau
 endif
 
-ifneq ($(CONFIG_VAAPI),)
+ifneq ($(CONFIG_XBMC_VAAPI),)
 CONFIGURE_ARGS+= --enable-vaapi
 else
 CONFIGURE_ARGS+= --disable-vaapi
 endif
 
-ifneq ($(CONFIG_CRYSTALHD),)
-CONFIGURE_ARGS+= \
-	--enable-crystalhd
+ifneq ($(CONFIG_XBMC_RTMP),)
+CONFIGURE_ARGS+= --enable-rtmp
 else
-CONFIGURE_ARGS+= \
-	--disable-crystalhd
+CONFIGURE_ARGS+= --disable-rtmp
+endif
+
+ifneq ($(CONFIG_XBMC_CRYSTALHD),)
+CONFIGURE_ARGS+= --enable-crystalhd
+else
+CONFIGURE_ARGS+= --disable-crystalhd
+endif
+
+ifneq ($(CONFIG_XBMC_HAL),)
+CONFIGURE_ARGS+= --enable-hal
+else
+CONFIGURE_ARGS+= --disable-hal
 endif
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
-		rm -rf config.{status,cache} ; \
 		./bootstrap ; \
 		$(call Build/Configure/Default, ) \
 	)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) externals 
-	$(MAKE) -C $(PKG_BUILD_DIR) xbmc.bin
-	$(MAKE) -C $(PKG_BUILD_DIR) xbmc-xrandr
-endef
+#define Build/Compile
+#	$(MAKE) -C $(PKG_BUILD_DIR) externals 
+#	$(MAKE) -C $(PKG_BUILD_DIR) xbmc.bin
+#	$(MAKE) -C $(PKG_BUILD_DIR) xbmc-xrandr
+#endef
 
 define Package/xbmc/install
 	$(INSTALL_DIR) $(1)/usr/bin
