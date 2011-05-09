@@ -1,0 +1,12 @@
+Index: xbmc-20110405/configure.in
+===================================================================
+--- xbmc-20110405.orig/configure.in	2011-05-09 12:45:49.681603001 +0200
++++ xbmc-20110405/configure.in	2011-05-09 12:46:25.405602990 +0200
+@@ -1610,6 +1610,7 @@
+       --enable-runtime-cpudetect \
+       --custom-libname-with-major="\$(FULLNAME)-\$(LIBMAJOR)-${ARCH}\$(SLIBSUF)" \
+       `case $host_cpu in i?86*) echo --disable-pic ;; *) echo --enable-pic ;; esac` \
++      --ld="$CC" \
+       --cc="$CC" &&
+       sed -i -e "s#define HAVE_SYMVER 1#define HAVE_SYMVER 0#" config.h &&
+       sed -i -e "s#define HAVE_SYMVER_GNU_ASM 1#define HAVE_SYMVER_GNU_ASM 0#" config.h

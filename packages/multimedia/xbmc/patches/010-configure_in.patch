@@ -1,0 +1,13 @@
+Index: xbmc-20110405/configure.in
+===================================================================
+--- xbmc-20110405.orig/configure.in	2011-05-09 11:52:03.457603001 +0200
++++ xbmc-20110405/configure.in	2011-05-09 11:52:32.789603026 +0200
+@@ -20,7 +20,7 @@
+ [
+   if [[ "$host_vendor" != "apple" ]]; then
+     AC_MSG_CHECKING([for lib$2 soname])
+-    $1_SONAME=$( $CC -print-file-name=lib$2.so | \
++    $1_SONAME=$( GCC_EXEC_PREFIX=$PKG_CONFIG_LIBDIR/../ $CC -print-file-name=lib$2.so | \
+       while read output; do objdump -p $output | \
+         grep "SONAME" | \
+         sed -e 's/  *SONAME  *//'; done 2> /dev/null )

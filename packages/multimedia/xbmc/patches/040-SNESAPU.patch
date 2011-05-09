@@ -1,0 +1,22 @@
+Index: xbmc-20110405/Makefile.in
+===================================================================
+--- xbmc-20110405.orig/Makefile.in	2011-05-09 13:53:29.269603003 +0200
++++ xbmc-20110405/Makefile.in	2011-05-09 13:54:11.765603010 +0200
+@@ -107,7 +107,6 @@
+ 	lib/timidity \
+ 	lib/libsidplay2 \
+ 	lib/stsound/StSoundLibrary \
+-	lib/snesapu/SNES/SNESAPU \
+ 	lib/vgmstream \
+ 
+ ifeq (@USE_ASAP_CODEC@,1)
+@@ -420,9 +419,6 @@
+   endif
+ endif
+ 	$(MAKE) -C lib/stsound/StSoundLibrary	
+-ifeq ($(or $(findstring powerpc,@ARCH@),$(findstring x86_64-linux,@ARCH@),$(findstring arm, @ARCH@)),)
+-	$(MAKE) -C lib/snesapu/SNES/SNESAPU
+-endif
+ imagelib: dllloader
+ 	$(MAKE) -C lib/cximage-6.0
+ 

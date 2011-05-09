@@ -1,0 +1,21 @@
+Index: xbmc-20110405/lib/ffmpeg/subdir.mak
+===================================================================
+--- xbmc-20110405.orig/lib/ffmpeg/subdir.mak	2011-05-09 13:16:18.637603002 +0200
++++ xbmc-20110405/lib/ffmpeg/subdir.mak	2011-05-09 13:17:09.093603025 +0200
+@@ -34,14 +34,14 @@
+ 
+ define RULES
+ $(SUBDIR)%$(EXESUF): $(SUBDIR)%.o
+-	$$(LD) $(FFLDFLAGS) -o $$@ $$^ -l$(FULLNAME) $(FFEXTRALIBS) $$(ELIBS)
++	$(CC) $(FFLDFLAGS) -o $$@ $$^ -l$(FULLNAME) $(FFEXTRALIBS) $$(ELIBS)
+ 
+ $(SUBDIR)$(SLIBNAME): $(SUBDIR)$(SLIBNAME_WITH_MAJOR)
+ 	$(Q)cd ./$(SUBDIR) && $(LN_S) $(SLIBNAME_WITH_MAJOR) $(SLIBNAME)
+ 
+ $(SUBDIR)$(SLIBNAME_WITH_MAJOR): $(OBJS) $(SUBDIR)lib$(NAME).ver
+ 	$(SLIB_CREATE_DEF_CMD)
+-	$$(LD) $(SHFLAGS) $(FFLDFLAGS) -o $$@ $$(filter %.o,$$^) $(FFEXTRALIBS) $(EXTRAOBJS)
++	$(CC) $(SHFLAGS) $(FFLDFLAGS) -o $$@ $$(filter %.o,$$^) $(FFEXTRALIBS) $(EXTRAOBJS)
+ 	$(SLIB_EXTRA_CMD)
+ 
+ ifdef SUBDIR

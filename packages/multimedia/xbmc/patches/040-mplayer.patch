@@ -1,0 +1,17 @@
+Index: xbmc-10.1/xbmc/visualizations/XBMCProjectM/libprojectM/Common.hpp
+===================================================================
+--- xbmc-10.1.orig/xbmc/visualizations/XBMCProjectM/libprojectM/Common.hpp	2011-05-05 13:50:34.732494002 +0200
++++ xbmc-10.1/xbmc/visualizations/XBMCProjectM/libprojectM/Common.hpp	2011-05-05 13:51:14.004493892 +0200
+@@ -57,11 +57,7 @@
+ #endif
+ 			 
+ #ifdef LINUX
+-#define projectM_isnan isnan
+-#endif
+-
+-#ifdef LINUX
+-#define projectM_isnan isnan
++#define projectM_isnan std::isnan
+ #endif
+ 
+ #ifdef WIN32

@@ -1,0 +1,21 @@
+Index: xbmc-20110405/xbmc/screensavers/rsxs-0.9/src/common.cc
+===================================================================
+--- xbmc-20110405.orig/xbmc/screensavers/rsxs-0.9/src/common.cc	2011-05-09 15:44:31.065603001 +0200
++++ xbmc-20110405/xbmc/screensavers/rsxs-0.9/src/common.cc	2011-05-09 15:45:05.437602349 +0200
+@@ -47,7 +47,6 @@
+ #include <X11/Xmu/StdCmap.h>  /* for XmuLookupStandardColormap */
+ #endif
+ #include <vroot.hh>
+-#include <ctime>
+ 
+ #define MAX_DELAY 10000
+ #define MIN_DELAY  1000
+@@ -603,7 +602,7 @@
+ 	struct argp parser =
+ 		{ options, Common::parse, NULL, NULL, child };
+ 
+-	std::srand((unsigned int)std::time(NULL));
++	std::srand((unsigned int)time(NULL));
+ 
+ 	// Use ARGP_LONG_ONLY to follow XScreenSaver tradition
+ 	if (argp_parse(&parser, argc, argv, ARGP_LONG_ONLY, NULL, NULL))
