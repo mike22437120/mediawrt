@@ -7,11 +7,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=glew
-PKG_VERSION:=1.5.8
+PKG_VERSION:=1.6.0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)/
-PKG_MD5SUM:=342c8dc64fb9daa6af245b132e086bdd
+PKG_MD5SUM:=7dfbb444b5a4e125bc5dba0aef403082
 
 include $(INCLUDE_DIR)/package.mk
 
