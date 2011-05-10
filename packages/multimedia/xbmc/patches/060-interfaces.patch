@@ -1,0 +1,16 @@
+Index: xbmc-20110405/xbmc/interfaces/Makefile.in
+===================================================================
+--- xbmc-20110405.orig/xbmc/interfaces/Makefile.in	2011-05-10 14:01:12.735739001 +0200
++++ xbmc-20110405/xbmc/interfaces/Makefile.in	2011-05-10 14:01:26.055740401 +0200
+@@ -8,11 +8,8 @@
+ 
+ endif
+ 
+-ifeq ($(findstring arm,$(ARCH)), arm)
+ SRCS+=  DbusServer.cpp \
+ 
+-endif
+-
+ LIB=interfaces.a
+ 
+ include @abs_top_srcdir@/Makefile.include

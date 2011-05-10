@@ -1,32 +1,53 @@
-config NONFREE_SUPPORT
-	bool "Non Free support"
+config XBMC_NONFREE
+	bool "Enable non-free components (rar, ccx, ffmpeg)"
 	default n
 
-config DVDCSS_SUPPORT
+config XBMC_DVDCSS
 	bool "DVD CSS support"
 	default n
 
-config FAAC_SUPPORT
+config XBMC_FAAC
 	bool "FAAC support"
 	default n
 
-config AVAHI_DAEMON
-	bool "AVAHI support"
+config XBMC_AVAHI
+	bool "Enable Avahi support"
 	default n
 
-config WEBSERVER
-	bool "WEBSERVER support"
+config XBMC_WEBSERVER
+	bool "Build Internal Webserver"
+	select PACKAGE_libmicrohttpd
 	default n
 
-config VDPAU
-	bool "VDPAU support"
+config XBMC_VDPAU
+	bool "Enable VDPAU support"
+	select PACKAGE_libvdpau
 	default n
 
-config VAAPI
+config XBMC_VAAPI
 	bool "VAAPI support"
 	default n
 
-config CRYSTALHD
+config XBMC_CRYSTALHD
 	bool "CRYSTALHD support"
 	default n
+	
+config XBMC_BLURAY
+	bool "BluRay support"
+	select PACKAGE_libbluray
+	default n
+	
+config XBMC_RTMP
+	bool "RTMP support via librtmp"
+	select PACKAGE_rtmpdump
+	default n	
+	
+config XBMC_PULSEAUDIO
+	bool "Enable PulseAudio support"
+	default n
+
+config XBMC_HAL
+	bool "Enable HAL support"
+	default n
+	
 	
