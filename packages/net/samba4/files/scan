@@ -1,0 +1,115 @@
+#!/bin/sh
+
+/usr/bin/unscan
+
+[ -f /etc/credentials ] && . /etc/credentials
+
+ADDR=`ifconfig | grep 'inet addr' | grep -v '127.0.0.1' | grep -v '10.10.0.' | cut -f2 -d:  | cut -f1 -d\  | cut -f1,2,3 -d.  `
+
+echo Checking local interfaces: `ifconfig | grep 'inet addr' | grep -v '127.0.0.1' | grep -v '10.10.0.' | cut -f2 -d:  | cut -f1 -d\  `
+
+for addr in $ADDR ; do
+        echo Testing subnet $addr.0
+        nmap -p 139 "$addr.*" -oG /tmp/$$.$addr.out > /dev/null
+        TARGETS=`grep open /tmp/$$.$addr.out | cut -f2 -d\  `
+        rm /tmp/$$.$addr.out
+        echo found SMB servers at $TARGETS
+        for target in $TARGETS ; do
+                echo '=========================================='
+                echo Probing $target
+                server=`nmblookup -A $target -s /etc/samba/smb.conf | grep '<00>' | grep -v '<GROUP>' | awk '{print  $1}' | tr [A-Z] [a-z] `  > /dev/null 2>&1
+                echo Found server $server
+                cred=`eval echo \\$$server`
+                if [[ x$cred != x ]] ; then
+                	dom=`echo $cred | cut -f1 -d/`
+                	user=`echo $cred | cut -f2 -d/ | cut -f1 -d%`
+                	passwd=`echo $cred | cut -f2 -d/ | cut -f2 -d%`
+                	echo found credentials for $server 
+                	if [[ x$1 == 'x-v' ]] ; then 
+	                	echo '------------------------------------------+'
+				nmblookup -A $target -s /etc/samba/smb.conf
+	                	echo '------------------------------------------+'
+			fi
+                	smbclient -U $user%$passwd -W $dom -s /etc/samba/smb.conf -L //$server/ -I $target > /tmp/$$.$target.out 2> /dev/null
+                	if [[ x$1 == 'x-v' ]] ; then
+                		cat /tmp/$$.$target.out
+	                	echo '------------------------------------------*'
+                	fi
+                else
+                	echo no credentials for $server - trying anonymous....
+                	if [[ x$1 == 'x-v' ]] ; then
+                        	echo '------------------------------------------+'
+                                nmblookup -A $target -s /etc/samba/smb.conf
+                                echo '------------------------------------------+'
+                      	fi
+                        smbclient -N -s /etc/samba/smb.conf -L //$server/ -I $target > /tmp/$$.$target.out 2> /dev/null
+                        if [[ x$1 == 'x-v' ]] ; then
+	                     	cat /tmp/$$.$target.out
+                        	echo '------------------------------------------*'
+                   	fi
+                fi
+                if [[ `grep -c LOGON_FAILURE /tmp/$$.$target.out` == 1 ]] ; then
+                	cat /tmp/$$.$target.out
+                	unset shares
+                else
+                	shares=`grep -v '[A-z]\\$ ' /tmp/$$.$target.out | grep Disk | sed -e 's/Disk .*$//;s/^ *//g;s/ *$//g;s/ /\\\_/g' | tr [A-Z] [a-z]`
+                fi
+                rm /tmp/$$.$target.out
+                if [[ "x$shares" != x ]]; then
+                	echo found shares: $shares
+                	for share in $shares ; do 
+                		lshare=`echo $share | sed -e 's/\\\_/_/g'`
+                		wshare=`echo $share | sed -e 's/\\\_/ /g'`
+                		cred=`eval echo \\$${server}_${lshare}`
+                		if [[ x$cred != x ]] ; then
+	                		dom=`echo $cred | cut -f1 -d/`
+                                        user=`echo $cred | cut -f2 -d/ | cut -f1 -d%`
+                                        passwd=`echo $cred | cut -f2 -d/ | cut -f2 -d%`
+	                		echo checking for $server $target $lshare
+        	        		if [[ `grep -c /tmp/mnt/$server/$lshare /proc/mounts` == 0 ]] ; then
+                				echo not mounted - will attempt to mount
+	                			mkdir -p /tmp/mnt/$server/$lshare
+	                			mount.cifs //$server/"$wshare" /tmp/mnt/$server/$lshare -o ip=$target,user=$user,pass=$passwd,dom=$dom,ro
+		                		if  [[ `grep -c /tmp/mnt/$server/$lshare /proc/mounts` == 1 ]] ; then
+	       	         				echo //$server/$lshare mounted successfully
+	        	        		else
+	                				echo //$server/$lshare failed to mount
+	                				rmdir /tmp/mnt/$server/$lshare
+	                				rmdir /tmp/mnt/$server
+	                			fi
+					else
+						echo //$server/$wshare already mounted
+						echo from `grep cifs /proc/mounts | grep /tmp/mnt/$server/$lshare | cut -f1 -d\ `
+					fi	
+				else
+					echo no credentials for //$server/$wshare - trying guest....
+	                		echo checking for $server $target $lshare
+        	        		if [[ `grep -c /tmp/mnt/$server/$lshare /proc/mounts` == 0 ]] ; then
+                				echo not mounted - will attempt to mount
+	                			mkdir -p /tmp/mnt/$server/$lshare
+	                			mount.cifs "//$server/$wshare" /tmp/mnt/$server/$lshare -o ip=$target,guest,ro
+		                		if  [[ `grep -c /tmp/mnt/$server/$lshare /proc/mounts` == 1 ]] ; then
+	       	         				echo //$server/$wshare mounted successfully
+	       	         			else
+	       	         				echo //$server/$lshare failed to mount
+	                				rmdir /tmp/mnt/$server/$lshare
+	                				rmdir /tmp/mnt/$server
+	                			fi
+					else
+						echo //$server/$wshare already mounted
+						echo from `grep cifs /proc/mounts | grep /tmp/mnt/$server/$lshare | cut -f1 -d\ `
+					fi	
+				fi
+                		done
+                fi
+        done
+done
+# set exit status to make sure we have 
+# mounted the share that rsync is
+# requesting
+# if we don't do this, then thre is no way to know if 
+# the share we have is actually available
+# if this directory does not exist,
+# rsync will return an error
+
+[ -d /tmp/mnt/`echo $RSYNC_REQUEST | cut -f2-3 -d/ ` ]

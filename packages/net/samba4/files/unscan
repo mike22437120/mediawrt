@@ -1,0 +1,54 @@
+#!/bin/sh
+
+echo unmounting current shares
+old_shares=`grep cifs /proc/mounts | grep /tmp/mnt | cut -f2 -d\ `
+
+if [[ "x$old_shares" != x ]] ; then
+	echo found $old_shares
+else
+	echo no old shares found
+fi
+
+for share in $old_shares ; do
+         stop=0
+         while [[ `grep -c $share /proc/mounts` != 0 ]] && [[ $stop != 5 ]] ; do
+                 echo unmounting $share `grep -c $share /proc/mounts` - try $stop
+                 umount $share
+                 if [[ `grep -c $share /proc/mounts` != 0 ]] ; then
+                 	echo $share still mounted - trying....
+                 	sleep 1
+                 else
+                 	echo $share unmounted successfully
+                 	sharesrv=`echo $share | cut -f1-4 -d/`
+                 	rmdir $share
+                 	if [[ `ls $sharesrv | wc -l` == 0 ]] ; then
+                 		rmdir $sharesrv
+                 	fi
+                 fi
+                 stop=$(($stop + 1))
+         done
+         if [[ $stop == 5 ]] ; then
+                 echo failed to unmount $share
+         fi
+done
+if [[ `ls /tmp/mnt | wc -l` != 0 ]] ; then
+	echo deleting unused mount points
+	for srv in `ls /tmp/mnt` ; do 
+		for sh in `ls /tmp/mnt/$srv` ; do
+			if [[ `ls /tmp/mnt/$srv/$sh | wc -l` == 0 ]] ; then
+				echo removing share $srv/$sh
+				rmdir /tmp/mnt/$srv/$sh
+			else
+				echo something is wrong - too many dirs in $sh
+				ls /tmp/mnt/$srv/$sh
+			fi
+		done
+		if [[ `ls /tmp/mnt/$srv | wc -l` == 0 ]] ; then
+			echo removing server $srv
+	                rmdir /tmp/mnt/$srv
+	        else
+	        	echo something is wrong - server dir $srv not empty
+	                ls /tmp/mnt/$srv
+	        fi
+	done
+fi
