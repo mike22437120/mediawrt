@@ -17,8 +17,10 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=git://github.com/xbmc/xbmc.git
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.bz2
 
+PKG_CONFIG_DEPENDS:=CONFIG_SDL_VIDEO_X11
 PKG_FIXUP:=autoreconf
 PKG_INSTALL=1
+
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -59,10 +61,6 @@ TARGET_LDFLAGS += \
 CONFIGURE_ARGS+= \
 	--with-arch=$(ARCH) \
 	--with-cpu=$(ARCH) \
-	--disable-external-ffmpeg \
-	--disable-external-liba52 \
-	--disable-external-libdts \
-	--enable-external-python \
 
 ifneq ($(CONFIG_XBMC_AVAHI),)
 CONFIGURE_ARGS+= --enable-avahi
@@ -136,18 +134,18 @@ else
 CONFIGURE_ARGS+= --disable-hal
 endif
 
+ifneq ($(CONFIG_XBMC_OPENGL),)
+CONFIGURE_ARGS+= --enable-gl
+else
+CONFIGURE_ARGS+= --disable-gl
+endif
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
 		./bootstrap ; \
 		$(call Build/Configure/Default, ) \
 	)
 endef
-
-#define Build/Compile
-#	$(MAKE) -C $(PKG_BUILD_DIR) externals 
-#	$(MAKE) -C $(PKG_BUILD_DIR) xbmc.bin
-#	$(MAKE) -C $(PKG_BUILD_DIR) xbmc-xrandr
-#endef
 
 define Package/xbmc/install
 	$(INSTALL_DIR) $(1)/usr/bin

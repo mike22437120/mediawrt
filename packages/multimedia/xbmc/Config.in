@@ -49,5 +49,9 @@ config XBMC_PULSEAUDIO
 config XBMC_HAL
 	bool "Enable HAL support"
 	default n
-	
+
+config XBMC_OPENGL
+	bool "Enable OpenGL support"
+	select SDL_VIDEO_OPENGL
+	default y
 	
