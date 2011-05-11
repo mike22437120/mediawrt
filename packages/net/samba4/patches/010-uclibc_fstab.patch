@@ -1,0 +1,18 @@
+Index: samba-3.5.8/client/mount.cifs.c
+===================================================================
+--- samba-3.5.8/client/mount.cifs.c	2011-05-11 01:31:16.768445933 -0700
++++ samba-3.5.8/client/mount.cifs.c	2011-05-11 01:34:33.584446289 -0700
+@@ -39,7 +39,12 @@
+ #include <mntent.h>
+ #include <fcntl.h>
+ #include <limits.h>
+-#include <fstab.h>
++#if defined(__UCLIBC__)
++  #include <paths.h>
++  #define _PATH_FSTAB _PATH_MNTTAB
++#else
++  #include <fstab.h>
++#endif
+ #include "mount.h"
+ 
+ #define MOUNT_CIFS_VERSION_MAJOR "1"

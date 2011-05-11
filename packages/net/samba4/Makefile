@@ -9,13 +9,11 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=samba4
 PKG_VERSION:=3.5.8
 PKG_RELEASE:=7
-PKG_MD5SUM:=f401a35f95641157bf2cc1f9cabf633
 
 PKG_SOURCE_URL:=ftp://ftp.easynet.be/samba/stable
 PKG_SOURCE:=samba-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/samba-$(PKG_VERSION)/
-
-include $(INCLUDE_DIR)/package.mk
+PKG_MD5SUM:=c53a9505b891414e36f7bccad3bd1235
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -103,8 +101,8 @@ CONFIGURE_ARGS+= \
 	--disable-cups \
 	--disable-static \
 
-MAKE_PATH:=source
-CONFIGURE_PATH:=source
+MAKE_PATH:=source3
+CONFIGURE_PATH:=source3
 
 define Build/Configure
 	cd $(PKG_BUILD_DIR)/$(MAKE_PATH); \
@@ -115,14 +113,14 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/source/include/libsmbclient.h  $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/source3/include/libsmbclient.h  $(1)/usr/include
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/source/bin/libtalloc.so* $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/source/bin/libtdb.so* $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/source/bin/libwbclient.so* $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/source/bin/libsmbclient.so* $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/source/bin/libsmbsharemodes.so* $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/source3/bin/libtalloc.so* $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/source3/bin/libtdb.so* $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/source3/bin/libwbclient.so* $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/source3/bin/libsmbclient.so* $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/source3/bin/libsmbsharemodes.so* $(1)/usr/lib
 endef
 
 define Package/samba4-common/install
@@ -133,21 +131,21 @@ endef
 
 define Package/samba4-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libtalloc.so $(1)/usr/lib/libtalloc.so.1
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libtdb.so $(1)/usr/lib/libtdb.so.1
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libwbclient.so $(1)/usr/lib/libwbclient.so.0
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libsmbclient.so* $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libsmbsharemodes.so $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/libtalloc.so $(1)/usr/lib/libtalloc.so.1
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/libtdb.so $(1)/usr/lib/libtdb.so.1
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/libwbclient.so $(1)/usr/lib/libwbclient.so.0
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/libsmbclient.so* $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/libsmbsharemodes.so $(1)/usr/lib
 endef
 
 define Package/samba4-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/samba.init $(1)/etc/init.d/samba
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbpasswd $(1)/usr/bin/smbpasswd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/smbpasswd $(1)/usr/bin/smbpasswd
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/nmbd $(1)/usr/sbin/nmbd
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbd $(1)/usr/sbin/smbd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/nmbd $(1)/usr/sbin/nmbd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/smbd $(1)/usr/sbin/smbd
 endef
 
 define Package/samba4-client/install
