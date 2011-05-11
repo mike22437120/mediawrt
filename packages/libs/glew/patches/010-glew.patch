@@ -1,0 +1,16 @@
+Index: glew-1.6.0/include/GL/glew.h
+===================================================================
+--- glew-1.6.0/include/GL/glew.h	2011-05-11 05:34:42.048452901 -0700
++++ glew-1.6.0/include/GL/glew.h	2011-05-11 05:35:28.844450291 -0700
+@@ -208,8 +208,9 @@
+ #endif
+ 
+ #define GLEW_APIENTRY_DEFINED
+-#define APIENTRY
+-
++#ifndef APIENTRY
++#  define APIENTRY
++#endif
+ /*
+  * GLEW_STATIC is defined for static library.
+  */
