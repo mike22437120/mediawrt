@@ -58,6 +58,7 @@ TARGET_LDFLAGS += \
 CONFIGURE_ARGS+= \
 	--with-arch=$(ARCH) \
 	--with-cpu=$(ARCH) \
+	--disable-texturepacker
 
 
 ifneq ($(CONFIG_XBMC_AVAHI),)

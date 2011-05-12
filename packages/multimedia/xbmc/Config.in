@@ -55,3 +55,7 @@ config XBMC_OPENGL
 	select SDL_VIDEO_OPENGL
 	default y
 	
+CONFIG_XBMC_XRANDR	
+	bool "Enable XRandr"
+	select SDL_VIDEO_X11_XRANDR
+	default y
