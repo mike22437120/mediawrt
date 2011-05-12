@@ -1,0 +1,13 @@
+Index: xbmc-20110405/Makefile.in
+===================================================================
+--- xbmc-20110405.orig/Makefile.in	2011-05-11 09:10:54.982948000 +0200
++++ xbmc-20110405/Makefile.in	2011-05-11 09:11:30.338947895 +0200
+@@ -551,7 +551,7 @@
+ ifeq ($(findstring osx,@ARCH@), osx)
+ 	$(CXX) $(LDFLAGS) -o xbmc.bin -Wl,-all_load,-ObjC $(DYNOBJSXBMC) $(OBJSXBMC) $(LIBS) -rdynamic
+ else
+-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o xbmc.bin -Wl,--whole-archive $(DYNOBJSXBMC) $(OBJSXBMC) -Wl,--no-whole-archive $(LIBS) -rdynamic
++	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o xbmc.bin -Wl,--whole-archive $(DYNOBJSXBMC) $(OBJSXBMC) -Wl,--no-whole-archive $(LIBS) -rdynamic -lc -lutil
+ endif
+ 
+ xbmc-xrandr: xbmc-xrandr.c

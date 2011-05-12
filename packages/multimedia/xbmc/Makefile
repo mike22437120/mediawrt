@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xbmc
-PKG_VERSION:=20110405
-PKG_REV:=93bd50ca905d72186e70
+PKG_VERSION:=20110510
+PKG_REV:=922e218babbe2358aff4
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -17,10 +17,7 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=git://github.com/xbmc/xbmc.git
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.bz2
 
-PKG_CONFIG_DEPENDS:=CONFIG_SDL_VIDEO_X11
-PKG_FIXUP:=autoreconf
-PKG_INSTALL=1
-
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -30,10 +27,10 @@ define Package/xbmc
   CATEGORY:=Multimedia
   TITLE:=XBMC Mediacenter
   URL:=http://www.xbmc.org
-  DEPENDS:= +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +dbus +libXt +libXtst +samba3-libs \
+  DEPENDS:= +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +dbus +libXt +libXtst +samba4-libs \
 	   +libXmu +libXrandr +libglu-mesa +glew +fontconfig +fribidi +libjpeg +libpng +libtiff +libfreetype +jasper +libmad +libsamplerate \
 	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libsdl +libsdl-mixer +libsdl-image \
-	   +libsqlite3 +libmysqlclient +librt +libssh +libXinerama +libreadline +uclibcxx +ffmpeg +libstdcpp\
+	   +libsqlite3 +libmysqlclient +librt +libssh +libXinerama +libreadline +uclibcxx +libstdcpp\
 	   $(ICONV_DEPENDS) $(INTL_DEPENDS) +@BUILD_NLS +@FEATURE_drawing-backend_libX11 @TARGET_x86
 endef
 
@@ -61,6 +58,7 @@ TARGET_LDFLAGS += \
 CONFIGURE_ARGS+= \
 	--with-arch=$(ARCH) \
 	--with-cpu=$(ARCH) \
+
 
 ifneq ($(CONFIG_XBMC_AVAHI),)
 CONFIGURE_ARGS+= --enable-avahi
@@ -138,6 +136,12 @@ ifneq ($(CONFIG_XBMC_OPENGL),)
 CONFIGURE_ARGS+= --enable-gl
 else
 CONFIGURE_ARGS+= --disable-gl
+endif
+
+ifneq ($(CONFIG_XBMC_XRANDR),)
+CONFIGURE_ARGS+= --enable-xrandr
+else
+CONFIGURE_ARGS+= --disable-xrandr
 endif
 
 define Build/Configure
