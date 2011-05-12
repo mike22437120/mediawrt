@@ -30,7 +30,7 @@ define Package/xbmc
   DEPENDS:= +boost +python +zlib +bzip2 +liblzo +libpcrecpp +alsa-lib +libass +enca +curl +dbus +libXt +libXtst +samba4-libs \
 	   +libXmu +libXrandr +libglu-mesa +glew +fontconfig +fribidi +libjpeg +libpng +libtiff +libfreetype +jasper +libmad +libsamplerate \
 	   +libogg +libvorbis +libcdio +libmms +libmodplug +faad2 +libflac +wavpack +libmpeg2 +libsdl +libsdl-mixer +libsdl-image \
-	   +libsqlite3 +libmysqlclient +librt +libssh +libXinerama +libreadline +uclibcxx +libstdcpp\
+	   +libsqlite3 +libmysqlclient +librt +libssh +libXinerama +libreadline +libstdcpp\
 	   $(ICONV_DEPENDS) $(INTL_DEPENDS) +@BUILD_NLS +@FEATURE_drawing-backend_libX11 @TARGET_x86
 endef
 
@@ -59,7 +59,6 @@ CONFIGURE_ARGS+= \
 	--with-arch=$(ARCH) \
 	--with-cpu=$(ARCH) \
 	--disable-texturepacker
-
 
 ifneq ($(CONFIG_XBMC_AVAHI),)
 CONFIGURE_ARGS+= --enable-avahi
