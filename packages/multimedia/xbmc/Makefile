@@ -153,13 +153,17 @@ endef
 
 define Package/xbmc/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin $(1)/usr/bin
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/xbmc $(1)/usr/lib
 
 	$(INSTALL_DIR) $(1)/usr/share
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/ $(1)/usr/share
+	$(CP) $(PKG_INSTALL_DIR)/usr/share $(1)/usr/share
 endef
+
+$(eval $(call RequireCommand,autopoint, \
+	$(PKG_NAME) requires autopoint installed on the host-system. \
+))
 
 $(eval $(call BuildPackage,xbmc))
