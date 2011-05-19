@@ -1,0 +1,13 @@
+Index: Xorg/font/dejavu-fonts-ttf/Makefile
+===================================================================
+--- feeds/packages/Xorg/font/dejavu-fonts-ttf/Makefile	(revision 26950)
++++ feeds/packages/Xorg/font/dejavu-fonts-ttf/Makefile	(working copy)
+@@ -21,7 +21,6 @@
+   SECTION:=xorg-font
+   CATEGORY:=Xorg
+   SUBMENU:=font
+-  DEPENDS:= @DISPLAY_SUPPORT
+   TITLE:=dejavu-fonts-ttf
+   URL:=http://dejavu.sourceforge.net/
+ endef
+
