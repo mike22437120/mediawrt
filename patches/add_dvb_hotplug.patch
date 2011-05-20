@@ -9,6 +9,7 @@ Index: package/hotplug2/files/hotplug2.rules
 +SUBSYSTEM ~~ (^net$|^input$|^button$|^usb$|^platform$|^ieee1394$|^block$|^atm$|^zaptel$|^tty$|^dvb$) {
  	exec /sbin/hotplug-call %SUBSYSTEM%
  }
+
 Index: package/kernel/files/10-dvb
 ===================================================================
 --- package/kernel/files/10-dvb	(revision 0)
