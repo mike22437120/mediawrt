@@ -47,4 +47,8 @@ define Package/vdr-plugin-sc/install
 	$(CP) ./files/*.conf $(1)/etc/config/vdr/plugins/sc/
 endef
 
+$(eval $(call RequireCommand,hg, \
+	$(PKG_NAME) requires mercurial installed on the host-system. \
+))
+
 $(eval $(call BuildPackage,vdr-plugin-sc))
