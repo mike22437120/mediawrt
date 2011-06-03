@@ -19,43 +19,43 @@ Index: feeds/packages/libs/libsdl/Config.in
 +
 +	config SDL_VIDEO_X11_DGA
 +		bool "X11 DGA Support"
-+		depends SDL_VIDEO_X11
++		select SDL_VIDEO_X11
 +		default y
 +		
 +	config SDL_VIDEO_X11_VM
 +		bool "X11 VM extension for fullscreen"
-+		depends SDL_VIDEO_X11	
++		select SDL_VIDEO_X11	
 +		default y
 +		
 +	config SDL_VIDEO_X11_XV
 +		bool "X11 XvImage extension for video"
-+		depends SDL_VIDEO_X11
++		select SDL_VIDEO_X11
 +		default y
 +
 +	config SDL_VIDEO_X11_XINERAMA
 +		bool "X11 Xinerama support"
-+		depends SDL_VIDEO_X11
++		select SDL_VIDEO_X11
 +		default n
 +
 +	config SDL_VIDEO_X11_XME
 +		bool "Xi Graphics XME for fullscreen"
-+		depends SDL_VIDEO_X11
++		select SDL_VIDEO_X11
 +		default n
 +
 +	config SDL_VIDEO_X11_XRANDR	
 +		bool "X11 Xrandr extension for fullscreen"
-+		depends SDL_VIDEO_X11
++		select SDL_VIDEO_X11
 +		select PACKAGE_libXrandr
 +		default n
 +
 +	config SDL_VIDEO_X11_DGAMOUSE	
 +		bool "X11 DGA for mouse events" 
-+		depends SDL_VIDEO_X11
++		select SDL_VIDEO_X11
 +		default y
 +
 +	config SDL_VIDEO_FBCON
 +		bool "Framebuffer support"
-+		depends SDL_VIDEO
++		select SDL_VIDEO
 +		default y
 +		
 +	config SDL_VIDEO_DIRECTFB
