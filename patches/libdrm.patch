@@ -1,0 +1,63 @@
+Index: Xorg/lib/libdrm/Makefile
+===================================================================
+--- Xorg/lib/libdrm/Makefile	(revision 26878)
++++ Xorg/lib/libdrm/Makefile	(working copy)
+@@ -9,15 +9,17 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=libdrm
+-PKG_VERSION:=2.3.1
++PKG_VERSION:=2.4.25
+ PKG_RELEASE:=3
+ 
+ PKG_SOURCE_URL:=http://dri.freedesktop.org/libdrm
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+-PKG_MD5SUM:=620fe7dd02c3236c3e9881a3a238173d
++PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
++PKG_MD5SUM:=f53dc4c72109b17908e4113c3b8addfe
+ 
+ PKG_FIXUP:=libtool
++PKG_INSTALL:=1
++PKG_BUILD_DEPENDS:=libpthread-stubs
+ 
+ include $(INCLUDE_DIR)/package.mk
+ 
+@@ -30,22 +32,27 @@
+   URL:=http://dri.freedesktop.org/
+ endef
+ 
+-CONFIGURE_ARGS += --enable-malloc0returnsnull --without-xcb
++CONFIGURE_ARGS += \
++		--enable-malloc0returnsnull \
++		--without-xcb
+ 
+-define Build/Compile
+-	$(call $(PKG_NAME)/Compile)
+-	make -C $(PKG_BUILD_DIR)
+-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
+-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
++EXTRA_LDFLAGS:= -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
++
++define Build/InstallDev
++	$(INSTALL_DIR) $(1)/usr/include
++	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
++
++	$(INSTALL_DIR) $(1)/usr/lib
++	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} $(1)/usr/lib/
++
++	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
++	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
+ endef
+ 
+ define Package/libdrm/install
+ 	$(INSTALL_DIR) $(1)/usr/lib
+-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
++	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdrm.so* $(1)/usr/lib/
+ endef
+ 
+-define Build/InstallDev
+-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+-endef
+-
+ $(eval $(call BuildPackage,libdrm))
