@@ -48,12 +48,8 @@ define Build/Configure
 endef
 
 define Package/v4l-dvb/install
-	$(INSTALL_DIR) $(1)/lib/firmware
-	$(CP) $(PKG_INSTALL_DIR)/lib/firmware/* $(1)/lib/firmware/
-	
-	$(INSTALL_DIR) $(1)/lib/modules
-	$(FIND) $(PKG_INSTALL_DIR) -name *.$(LINUX_KMOD_SUFFIX) -exec $(CP) -a {} $(1)/lib/modules
-	
+	$(INSTALL_DIR) $(1)/lib/modules/$(LINUX_VERSION)
+	$(FIND) $(PKG_INSTALL_DIR) -name *.$(LINUX_KMOD_SUFFIX) -type f | xargs cp -t $(1)/lib/modules/$(LINUX_VERSION)/
 endef
 
 $(eval $(call BuildPackage,v4l-dvb))
