@@ -1,0 +1,14 @@
+Index: include/kernel.mk
+===================================================================
+--- include/kernel.mk	(revision 27098)
++++ include/kernel.mk	(working copy)
+@@ -79,7 +79,7 @@
+ 			for mod in $$$$$$$$mods; do \
+ 				echo "$$$$$$$$mod"; \
+ 			done \
+-		) > $(2)/etc/modules.d/$$$$$$$$priority-$(1); \
++		) | sed -e 's|/| |g' > $(2)/etc/modules.d/$$$$$$$$priority-$(1); \
+ 		modules="$$$$$$$${modules:+$$$$$$$$modules }$$$$$$$$priority-$(1)"; \
+ 	}; \
+ 	$(3) \
+
