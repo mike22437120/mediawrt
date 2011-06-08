@@ -1,7 +1,7 @@
-Index: Xorg/lib/libdrm/Makefile
+Index: feeds/packages/Xorg/lib/libdrm/Makefile
 ===================================================================
---- Xorg/lib/libdrm/Makefile	(revision 26878)
-+++ Xorg/lib/libdrm/Makefile	(working copy)
+--- feeds/packages/Xorg/lib/libdrm/Makefile	(revision 26878)
++++ feeds/packages/Xorg/lib/libdrm/Makefile	(working copy)
 @@ -9,15 +9,17 @@
  include $(TOPDIR)/rules.mk
  
