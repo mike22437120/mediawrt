@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/tvheadend
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=$(ICONV_DEPENDS) +libopenssl
+  DEPENDS:=$(ICONV_DEPENDS) +libopenssl +librt
   TITLE:=Tvheadend is a TV streaming server for Linux
   URL:=https://www.lonelycoder.com/hts/tvheadend_overview.html
 endef
