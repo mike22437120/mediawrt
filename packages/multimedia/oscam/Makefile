@@ -37,6 +37,9 @@ CMAKE_OPTIONS += \
 		-DCS_CONFDIR=/etc/config/oscam
 
 define Package/oscam/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/oscam.init $(1)/etc/init.d/oscam
+
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/oscam $(1)/usr/bin/
 
