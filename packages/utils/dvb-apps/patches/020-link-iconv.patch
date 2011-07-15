@@ -1,0 +1,10 @@
+--- a/util/scan/Makefile
++++ b/util/scan/Makefile
+@@ -15,6 +15,7 @@ inst_bin = $(binaries)
+ removing = atsc_psip_section.c atsc_psip_section.h
+ 
+ CPPFLAGS += -DDATADIR=\"$(prefix)/share\"
++LDLIBS   += -liconv
+ 
+ .PHONY: all
+ 

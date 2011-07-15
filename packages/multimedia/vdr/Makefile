@@ -20,7 +20,8 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
-PKG_BUILD_DEPENDS:=vdr-plugin-femon \
+PKG_BUILD_DEPENDS:= \
+		vdr-plugin-femon \
 		vdr-plugin-sc \
 		vdr-plugin-vnsiserver
 

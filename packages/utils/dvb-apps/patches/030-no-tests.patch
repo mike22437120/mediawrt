@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@
+ 
+ all clean install:
+ 	$(MAKE) -C lib $@
+-	$(MAKE) -C test $@
++#	$(MAKE) -C test $@
+ 	$(MAKE) -C util $@
+ 
+ update:
