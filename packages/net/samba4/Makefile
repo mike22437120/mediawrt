@@ -13,7 +13,7 @@ PKG_RELEASE:=7
 PKG_SOURCE_URL:=ftp://ftp.easynet.be/samba/stable
 PKG_SOURCE:=samba-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/samba-$(PKG_VERSION)/
-PKG_MD5SUM:=c53a9505b891414e36f7bccad3bd1235
+PKG_MD5SUM:=355b4530c20997e94aebc74cd6ea5307
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -150,19 +150,19 @@ endef
 
 define Package/samba4-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/smbclient $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/nmblookup $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/smbclient $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/nmblookup $(1)/usr/bin
 endef
 
 define Package/samba4-smbmount/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/smbmount $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/smbmnt $(1)/usr/bin
+	#$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/usr/bin/smbmount $(1)/usr/bin
+	#$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/usr/bin/smbmnt $(1)/usr/bin
 endef
 
 define Package/samba4-cifsmount/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mount.cifs $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source3/bin/mount.cifs $(1)/usr/bin
 endef
 
 define Package/samba4-scan/install
