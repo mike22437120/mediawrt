@@ -142,7 +142,7 @@ DVB_USB_DIB0700_1_20_FW:=dvb-usb-dib0700-1.20.fw
 
 define Download/dvb_usb_dib0700_1_20
     FILE:=$(DVB_USB_DIB0700_1_20_FW)
-    URL:=http://code.google.com/p/wl-700ge/source/browse/trunk/firmware/
+    URL:=http://code.google.com/p/mediawrt/source/browse/trunk/firmware/
 endef
 
 
