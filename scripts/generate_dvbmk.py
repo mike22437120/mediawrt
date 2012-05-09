@@ -250,7 +250,6 @@ $(eval $(call KernelPackage,%(module_name)s))
     config["firmwares"] = []
     temp_config_firmwares = []
     for sourcefile in config["source_files"]:
-	print "debug:" + sourcefile
         temp_config_firmwares += find_module_files("", KERNEL_PATH+sourcefile, ".firmware")
     #We remove the probable comma
     temp_config_firmwares = [item.replace(",",'') for item in temp_config_firmwares]
