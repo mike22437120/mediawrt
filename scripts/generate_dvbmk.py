@@ -125,7 +125,14 @@ def find_module_files(pre, filename, module):
     module_files = []
     for index, line in enumerate(lines_makefile):
         if module in line:
-            for module_object in lines_makefile[index].strip().split('=')[1].split(' '):
+	    splitLine = lines_makefile[index].strip().split('=')
+
+	    if len(splitLine) < 2 :
+		continue
+	    
+	    splitLine = splitLine[1].split(' ') 		
+
+            for module_object in splitLine:
                 #we remove thing without sence
                 if len(module_object) <3 :
                     continue
@@ -243,12 +250,13 @@ $(eval $(call KernelPackage,%(module_name)s))
     config["firmwares"] = []
     temp_config_firmwares = []
     for sourcefile in config["source_files"]:
+	print "debug:" + sourcefile
         temp_config_firmwares += find_module_files("", KERNEL_PATH+sourcefile, ".firmware")
     #We remove the probable comma
     temp_config_firmwares = [item.replace(",",'') for item in temp_config_firmwares]
     #Dirty hack, since we don't completely parse the C code, we exclude false positive searching for .fw" in the name
     for item in temp_config_firmwares:
-        if ".fw\"" in item and item.replace("\"", "") not in config["firmwares"]:
+       if ".fw\"" in item and item.replace("\"", "") not in config["firmwares"]:
             config["firmwares"].append(item.replace("\"", ""))
     print " ** This object needs the firmwares : " + str(config["firmwares"]) 
     firmware_list = ""
@@ -267,12 +275,14 @@ $(eval $(call KernelPackage,%(module_name)s))
         print " * We loop on the selected modules "
     for module in config["select"]:
         print "  Module : " + module
+	new_files = ""
         if(module.find("MEDIA")==0):
             new_files = find_module_files("drivers/media/common/tuners/", KERNEL_PATH+"drivers/media/common/tuners/Makefile", "CONFIG_" + module)
             config["files"] += [item[:-2] for item in new_files]
         elif(module.find("DVB")==0):
             new_files = find_module_files("drivers/media/dvb/frontends/", KERNEL_PATH+"drivers/media/dvb/frontends/Makefile", "CONFIG_" + module)
             config["files"] += [item[:-2] for item in new_files]
+
         print "    New files : " + str(new_files)
 
     if len(config["select"]):
@@ -376,4 +386,3 @@ if __name__ == "__main__" :
             
     dvb_mk.close()
     dvb_usb_kconfig.close()
-
