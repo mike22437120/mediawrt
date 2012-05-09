@@ -193,7 +193,7 @@ def deal_config(config, filedvbmk):
 
     firmware_download_pattern = """define Download/%(name)s
     FILE:=$(%(filename)s)
-    URL:=http://code.google.com/p/wl-700ge/source/browse/trunk/firmware/
+    URL:=https://mediawrt.googlecode.com/svn/trunk/firmware/
 endef
 
 """
