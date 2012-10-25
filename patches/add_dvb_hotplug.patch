@@ -35,4 +35,4 @@ Index: package/kernel/files/10-dvb
 +		rm -rf /dev/dvb/$adapter/
 +	;;
 +esac
- 
+
